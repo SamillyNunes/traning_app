@@ -1,5 +1,13 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:training_app/core/app_colors.dart';
+import 'package:training_app/core/app_images.dart';
+
+import 'widgets/focus_exercise_widget.dart';
+import 'widgets/today_exercise_container.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -9,6 +17,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List info = [];
+
+  void _initData() {
+    DefaultAssetBundle.of(context).loadString("assets/json/info.json").then(
+      (value) {
+        setState(() {
+          info = json.decode(value);
+        });
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    _initData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
@@ -81,92 +107,111 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 20),
-            Container(
+            const TodayExerciseContainer(),
+            const SizedBox(height: 5),
+            SizedBox(
+              height: 180,
               width: _size.width,
-              height: 200,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.gradientFirst.withOpacity(.8),
-                    AppColors.gradientSecond.withOpacity(.9),
-                  ],
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                  topRight: Radius.circular(80),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(5, 18),
-                    blurRadius: 20,
-                    color: AppColors.gradientSecond.withOpacity(.2),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 25,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Stack(
                 children: [
-                  const Text(
-                    "Next Workout",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.homePageContainerTextSmall,
+                  Container(
+                    width: _size.width,
+                    height: 120,
+                    margin: const EdgeInsets.only(top: 38),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(28),
+                      image: const DecorationImage(
+                        image: AssetImage(
+                          AppImages.cardImg,
+                        ),
+                        fit: BoxFit.fill,
+                      ),
+                      boxShadow: [
+                        // sombra inferior
+                        BoxShadow(
+                          blurRadius: 48,
+                          offset: const Offset(8, 18),
+                          color: AppColors.gradientSecond.withOpacity(.3),
+                        ),
+                        // sombra superior
+                        BoxShadow(
+                          blurRadius: 10,
+                          offset: const Offset(-1, -5),
+                          color: AppColors.gradientSecond.withOpacity(.3),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 5),
-                  const Text(
-                    "Legs Toning and Glutes Toning",
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: AppColors.homePageContainerTextSmall,
+                  Container(
+                    height: 200,
+                    width: _size.width,
+                    margin: const EdgeInsets.only(right: 200, bottom: 30),
+                    decoration: BoxDecoration(
+                      // color: Colors.redAccent.withOpacity(.2),
+                      borderRadius: BorderRadius.circular(20),
+                      image: const DecorationImage(
+                        image: AssetImage(
+                          AppImages.figureImg,
+                        ),
+                        // fit: BoxFit.fill,
+                      ),
                     ),
                   ),
-                  const Spacer(),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const Icon(
-                        Icons.timer,
-                        size: 20,
-                        color: AppColors.homePageContainerTextSmall,
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        "60 min",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColors.homePageContainerTextSmall,
+                  Positioned(
+                    left: 150,
+                    top: 50,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "You are doing great",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.homePageDetail,
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(60),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: AppColors.gradientFirst,
-                              blurRadius: 18,
-                              offset: Offset(4, 8),
-                            ),
-                          ],
+                        SizedBox(height: 10),
+                        Text(
+                          "Keep it up\nstick to your plan",
+                          style: TextStyle(
+                            color: AppColors.homePagePlanColor,
+                            fontSize: 16,
+                          ),
                         ),
-                        child: const Icon(
-                          Icons.play_circle_fill,
-                          color: Colors.white,
-                          size: 60,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
+              ),
+            ),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Area of focus",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.homePageTitle,
+                ),
+              ),
+            ),
+            Expanded(
+              child: GridView.builder(
+                itemCount: info.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                ),
+                padding: EdgeInsets.zero,
+                itemBuilder: (_, index) {
+                  return FocusExerciseWidget(
+                    title: info[index]['title'],
+                    image: info[index]['img'],
+                  );
+                },
               ),
             ),
           ],
