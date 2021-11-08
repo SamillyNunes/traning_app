@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:training_app/pages/home/home_page.dart';
+import 'package:training_app/pages/exercise_videos/exercise_videos_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const ExerciseVideosPage(),
     );
   }
 }
