@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:get/get.dart';
 import 'package:training_app/core/app_colors.dart';
 import 'package:training_app/core/app_images.dart';
+import 'package:training_app/pages/exercise_videos/exercise_videos_page.dart';
 
 import 'widgets/focus_exercise_widget.dart';
 import 'widgets/today_exercise_container.dart';
@@ -81,8 +83,8 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 30),
             Row(
-              children: const [
-                Text(
+              children: [
+                const Text(
                   'Training',
                   style: TextStyle(
                     fontSize: 20,
@@ -90,19 +92,24 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Spacer(),
-                Text(
+                const Spacer(),
+                const Text(
                   'Details',
                   style: TextStyle(
                     fontSize: 20,
                     color: AppColors.homePageDetail,
                   ),
                 ),
-                SizedBox(width: 5),
-                Icon(
-                  Icons.arrow_forward,
-                  size: 20,
-                  color: AppColors.homePageIcons,
+                const SizedBox(width: 5),
+                InkWell(
+                  onTap: () {
+                    Get.to(() => const ExerciseVideosPage());
+                  },
+                  child: const Icon(
+                    Icons.arrow_forward,
+                    size: 20,
+                    color: AppColors.homePageIcons,
+                  ),
                 ),
               ],
             ),

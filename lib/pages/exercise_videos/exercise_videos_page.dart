@@ -1,11 +1,40 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:training_app/core/app_colors.dart';
 
 import 'widgets/app_badgets.dart';
 
 /// Página de detalhes e vídeos acerca de um tipo de exercício
-class ExerciseVideosPage extends StatelessWidget {
+class ExerciseVideosPage extends StatefulWidget {
   const ExerciseVideosPage({Key? key}) : super(key: key);
+
+  @override
+  State<ExerciseVideosPage> createState() => _ExerciseVideosPageState();
+}
+
+class _ExerciseVideosPageState extends State<ExerciseVideosPage> {
+  List info = [];
+
+  void _initData() {
+    DefaultAssetBundle.of(context)
+        .loadString("assets/json/video_info.json")
+        .then(
+      (value) {
+        setState(() {
+          info = json.decode(value);
+        });
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    _initData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +67,18 @@ class ExerciseVideosPage extends StatelessWidget {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Icon(
-                        Icons.arrow_back_ios,
-                        size: 20,
-                        color: AppColors.secondPageIconColor,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: const Icon(
+                          Icons.arrow_back_ios,
+                          size: 20,
+                          color: AppColors.secondPageIconColor,
+                        ),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.info_outline_rounded,
                         size: 20,
                         color: AppColors.secondPageIconColor,
@@ -62,39 +96,6 @@ class ExerciseVideosPage extends StatelessWidget {
                   const SizedBox(height: 50),
                   Row(
                     children: const [
-                      // Container(
-                      //   width: 90,
-                      //   height: 30,
-                      //   decoration: BoxDecoration(
-                      //     borderRadius: BorderRadius.circular(10),
-                      //     gradient: const LinearGradient(
-                      //       colors: [
-                      //         AppColors.secondPageContainerGradient1stColor,
-                      //         AppColors.secondPageContainerGradient2ndColor,
-                      //       ],
-                      //       begin: Alignment.bottomLeft,
-                      //       end: Alignment.topRight,
-                      //     ),
-                      //   ),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: const [
-                      //       Icon(
-                      //         Icons.timer,
-                      //         size: 20,
-                      //         color: AppColors.secondPageIconColor,
-                      //       ),
-                      //       SizedBox(width: 5),
-                      //       Text(
-                      //         "68 min",
-                      //         style: TextStyle(
-                      //           fontSize: 16,
-                      //           color: AppColors.secondPageIconColor,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                       AppBadget(
                         icon: Icons.timer,
                         text: "68 min",
@@ -109,6 +110,52 @@ class ExerciseVideosPage extends StatelessWidget {
                     ],
                   ),
                 ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(left: 30, right: 20),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(70),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Circuit 1: Legs Toning",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.circuitsColor,
+                          ),
+                        ),
+                        Row(
+                          children: const [
+                            Icon(
+                              Icons.loop,
+                              size: 30,
+                              color: AppColors.loopColor,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "3 sets",
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: AppColors.setsColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
