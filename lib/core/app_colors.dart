@@ -19,4 +19,5 @@ class AppColors {
   static const Color loopColor = Color(0xFF6d8dea);
   static const Color setsColor = Color(0xFF9999a9);
   static const Color circuitsColor = Color(0xFF2f2f51);
+  static const Color white500 = Color(0xFFeaeefc);
 }
